@@ -5,7 +5,9 @@ import java.util.stream.Collectors;
 
 public class Itemset {
 	
-	private TreeSet<Item> itemset = new TreeSet<>((a, b) -> a.getMis().compareTo(b.getMis()));
+	private TreeSet<Item> itemset = new TreeSet<>((a, b) -> a.getMis().compareTo(b.getMis()) != 0 ?
+														a.getMis().compareTo(b.getMis()) :
+														a.getId().compareTo(b.getId()));
 	private Double sdc;
 	
 	public Itemset(Double sdc) {
@@ -17,6 +19,12 @@ public class Itemset {
 	}
 	public void setItemset(TreeSet<Item> itemset) {
 		this.itemset = itemset;
+	}
+	public void addItem(Item item) {
+		this.itemset.add(item);
+	}
+	public Item getItem(Integer id) {
+		return this.itemset.stream().filter(i -> i.getId() == id).findAny().orElse(null);
 	}
 	public Double getSdc() {
 		return sdc;

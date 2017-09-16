@@ -21,8 +21,7 @@ public class APriori {
         InputReader inputReader = new InputReader();
         inputReader.read(inputFile, parametersFile, itemsets, cannotBeTogetherItemsets, mustHaveItems, items, SDC);
         
-        System.out.println(itemsets);
-        System.err.println(SDC);
+        
 		
 	}
 }

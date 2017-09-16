@@ -56,11 +56,9 @@ public class InputReader {
         	String[] values = s.split("\\{|\\}")[1].split(", ");
         	Itemset temp = new Itemset(null);
             for (String value : values)
-            	temp.getItemset().add(items.get(Integer.valueOf(value)));
+            	temp.addItem(items.get(Integer.valueOf(value.trim())));
             itemsets.add(temp);
         }
-        System.err.println(SDC);	
-        System.err.println(itemsets);
 	}
 
 }
