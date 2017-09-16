@@ -9,18 +9,18 @@ import java.util.TreeMap;
 
 public class InputReader {
 	
-	public void read(File inputFile,
+	public double read(File inputFile,
 			File parametersFile,
 			ArrayList<Itemset> itemsets,
 			ArrayList<Itemset> cannotBeTogetherItemsets,
 			ArrayList<Item> mustHaveItems,
-			TreeMap<Integer, Item> items,
-			Double SDC) throws IOException {
+			TreeMap<Integer, Item> items) throws IOException {
 		
 		BufferedReader inputBuffer = new BufferedReader(new FileReader(inputFile));
         BufferedReader parameterBuffer = new BufferedReader(new FileReader(parametersFile));
         
         String s;
+        double SDC = 0.0;
         
         while((s = parameterBuffer.readLine()) != null) {
         	if(s.contains("MIS")) {
@@ -59,6 +59,7 @@ public class InputReader {
             	temp.addItem(items.get(Integer.valueOf(value.trim())));
             itemsets.add(temp);
         }
+        return SDC;
 	}
 
 }

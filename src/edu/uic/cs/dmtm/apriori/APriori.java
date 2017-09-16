@@ -16,12 +16,10 @@ public class APriori {
         ArrayList<Item> mustHaveItems = new ArrayList<>();
         TreeMap<Integer, Item> items = new TreeMap<>();
         
-        Double SDC = 0.0;
-        
         InputReader inputReader = new InputReader();
-        inputReader.read(inputFile, parametersFile, itemsets, cannotBeTogetherItemsets, mustHaveItems, items, SDC);
+        Double SDC = inputReader.read(inputFile, parametersFile, itemsets, cannotBeTogetherItemsets, mustHaveItems, items);
         
-        
+        System.err.println(SDC);
 		
 	}
 }
