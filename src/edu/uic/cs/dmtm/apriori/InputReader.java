@@ -11,7 +11,7 @@ public class InputReader {
 	
 	public double read(File inputFile,
 			File parametersFile,
-			ArrayList<Itemset> itemsets,
+			ArrayList<Itemset> transactions,
 			ArrayList<Itemset> cannotBeTogetherItemsets,
 			ArrayList<Item> mustHaveItems,
 			TreeMap<Integer, Item> items) throws IOException {
@@ -57,7 +57,7 @@ public class InputReader {
         	Itemset temp = new Itemset(null);
             for (String value : values)
             	temp.addItem(items.get(Integer.valueOf(value.trim())));
-            itemsets.add(temp);
+            transactions.add(temp);
         }
         return SDC;
 	}
