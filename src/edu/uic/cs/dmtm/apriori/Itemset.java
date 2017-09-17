@@ -1,5 +1,6 @@
 package edu.uic.cs.dmtm.apriori;
 
+import java.lang.invoke.WrongMethodTypeException;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -56,7 +57,7 @@ public class Itemset {
 		maxMIS();
 	}
 	public void computeSupport(int N) {
-		support = (double) (supportCount / N);
+		support = ((double) (supportCount)) / N;
 	}
 	public boolean contains(Itemset other) {
 		for(Item i : other.getItemset())
@@ -73,10 +74,21 @@ public class Itemset {
 	public void setSdc(Double sdc) {
 		this.sdc = sdc;
 	}
+	public Itemset join2(Itemset other) throws WrongMethodTypeException {
+		if(this.getItemset().size() != 1 || other.getItemset().size() != 1)
+			throw new WrongMethodTypeException();
+		Itemset joined = new Itemset(this.sdc);
+		joined.itemset.addAll(this.itemset);
+		joined.itemset.addAll(other.itemset);
+		joined.minMIS();
+		joined.maxMIS();
+		joined.sdc = this.sdc;
+		return joined;
+	}
 	
 	@Override
 	public String toString() {
-		return itemset.stream().collect(Collectors.toList()).toString();
+		return itemset.stream().collect(Collectors.toList()).toString() + ":" + supportCount;
 	}
 
 }
