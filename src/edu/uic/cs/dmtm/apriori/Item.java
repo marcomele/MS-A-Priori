@@ -2,7 +2,7 @@ package edu.uic.cs.dmtm.apriori;
 
 public class Item implements Comparable<Item> {
 	
-	private Integer id;
+	private String id;
 	private Double mis;
 	private Double support;
 	private Integer supportCount;
@@ -23,17 +23,17 @@ public class Item implements Comparable<Item> {
 		this.supportCount ++;
 	}
 
-	public Item(Integer id, Double mis) {
+	public Item(String id, Double mis) {
 		this.id = id;
 		this.mis = mis;
 		this.support = 0.0;
 		this.supportCount = 0;
 	}
 	
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public Double getMis() {
@@ -45,7 +45,7 @@ public class Item implements Comparable<Item> {
 
 	@Override
 	public int compareTo(Item o) {
-		return this.id - o.id;
+		return this.id.compareTo(o.id);
 	}
 	
 	@Override

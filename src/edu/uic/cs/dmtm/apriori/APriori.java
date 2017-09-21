@@ -2,10 +2,7 @@ package edu.uic.cs.dmtm.apriori;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.chrono.MinguoChronology;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -19,7 +16,7 @@ public class APriori {
 		ArrayList<Itemset> transactions = new ArrayList<>();
         ArrayList<Itemset> cannotBeTogetherItemsets = new ArrayList<>();
         ArrayList<Item> mustHaveItems = new ArrayList<>();
-        TreeMap<Integer, Item> I = new TreeMap<>();
+        TreeMap<String, Item> I = new TreeMap<>();
         
         InputReader inputReader = new InputReader();
         Double SDC = inputReader.read(inputFile, parametersFile, transactions, cannotBeTogetherItemsets, mustHaveItems, I);

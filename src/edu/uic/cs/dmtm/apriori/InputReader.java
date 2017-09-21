@@ -14,7 +14,7 @@ public class InputReader {
 			ArrayList<Itemset> transactions,
 			ArrayList<Itemset> cannotBeTogetherItemsets,
 			ArrayList<Item> mustHaveItems,
-			TreeMap<Integer, Item> items) throws IOException {
+			TreeMap<String, Item> items) throws IOException {
 		
 		BufferedReader inputBuffer = new BufferedReader(new FileReader(inputFile));
         BufferedReader parameterBuffer = new BufferedReader(new FileReader(parametersFile));
@@ -26,7 +26,7 @@ public class InputReader {
         	if(s.contains("MIS")) {
         		String id = s.split("\\(")[1].split("\\)")[0];
         		String mis = s.split("= ")[1];
-        		items.put(Integer.valueOf(id), new Item(Integer.valueOf(id), Double.valueOf(mis)));
+        		items.put(id, new Item(id, Double.valueOf(mis)));
         	} else if(s.contains("SDC")) {
         		SDC = Double.valueOf(s.split("= ")[1]);
         	} else if(s.contains("cannot")) {
@@ -39,7 +39,7 @@ public class InputReader {
         				String[] ids = string.split("\\}")[0].split(", ");
         				//System.out.println(string.split("\\}")[0]);
         				for(String i : ids) {
-        					cbtItemset.getItemset().add(items.get(Integer.valueOf(i)));
+        					cbtItemset.getItemset().add(items.get(i));
         				}
         				cannotBeTogetherItemsets.add(cbtItemset);        				
         			}
@@ -47,7 +47,7 @@ public class InputReader {
         	} else if(s.contains("must")) {
         		String[] st = s.split(": ")[1].split(" [a-z ]*");
         		for(String stt : st)
-        			mustHaveItems.add(items.get(Integer.valueOf(stt)));
+        			mustHaveItems.add(items.get(stt));
         	} else
         		System.err.println("Che cazzo hai scritto in questo file");
         }
@@ -56,7 +56,7 @@ public class InputReader {
         	String[] values = s.split("\\{|\\}")[1].split(", ");
         	Itemset temp = new Itemset(null);
             for (String value : values) {
-            	Item i = items.get(Integer.valueOf(value.trim()));
+            	Item i = items.get(value.trim());
             	i.increaseSupportCount();
             	temp.addItem(i);
             }
@@ -64,6 +64,10 @@ public class InputReader {
         }
         int N = transactions.size();
         items.values().stream().forEach(i -> i.setSupport((double) (i.getSupportCount()) / N));
+        
+        inputBuffer.close();
+        parameterBuffer.close();
+        
         return SDC;
 	}
 

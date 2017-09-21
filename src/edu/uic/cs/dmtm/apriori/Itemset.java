@@ -1,13 +1,8 @@
 package edu.uic.cs.dmtm.apriori;
 
-import java.lang.invoke.WrongMethodTypeException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import org.ietf.jgss.Oid;
 
 public class Itemset {
 	
@@ -68,8 +63,8 @@ public class Itemset {
 				return false;
 		return true;
 	}
-	public Item getItem(Integer id) {
-		return this.itemset.stream().filter(i -> i.getId() == id).findAny().orElse(null);
+	public Item getItem(String id) {
+		return this.itemset.stream().filter(i -> i.getId().equals(id)).findAny().orElse(null);
 	}
 	public Double getSdc() {
 		return sdc;
@@ -108,7 +103,7 @@ public class Itemset {
 			Item first = iterator.next();
 			Item second = iterator.next();
 			if(itemset.stream().anyMatch(item -> item.equals(first)) || first.getMis() == second.getMis())
-				if(!F.contains(subset))
+				if(!F.stream().anyMatch(iset -> iset.getItemset().containsAll(subset)))
 					return true;
 		}
 		return false;
