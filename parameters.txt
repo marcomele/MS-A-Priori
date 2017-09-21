@@ -1,15 +1,8 @@
-MIS(10) = 0.43
-MIS(20) = 0.30
-MIS(30) = 0.30
-MIS(40) = 0.40
-MIS(50) = 0.40
-MIS(60) = 0.30
-MIS(70) = 0.20
-MIS(80) = 0.20
-MIS(90) = 0.20
-MIS(100) = 0.10
-MIS(120) = 0.20
-MIS(140) = 0.15
-SDC = 0.1
-cannot_be_together: {20, 40}, {70, 80}
-must-have: 20 or 40 or 50
+MIS(Beef) = 0.25
+MIS(Bread) = 0.7
+MIS(Clothes) = 0.25
+MIS(Milk) = 0.5
+MIS(Cheese) = 0.25
+MIS(Boots) = 0.25
+MIS(Shoes) = 0.25
+SDC = 1.0

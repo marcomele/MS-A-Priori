@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class APriori {
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, NoFrequentItemsetsException, DifferentItemsetSizeException {
 		File inputFile = new File("inputdata.txt");
 		File parametersFile = new File("parameters.txt");
 		
@@ -20,9 +20,7 @@ public class APriori {
         
         InputReader inputReader = new InputReader();
         Double SDC = inputReader.read(inputFile, parametersFile, transactions, cannotBeTogetherItemsets, mustHaveItems, I);
-        
-        System.err.println(I);
-        
+                
         TreeSet<Itemset> M = new TreeSet<>(new ItemsetComparator());
         int N = transactions.size();
         int kMax = transactions.stream().mapToInt(t -> t.getItemset().size()).max().getAsInt();
@@ -35,42 +33,32 @@ public class APriori {
         }
         
         supportCounter(transactions, M, N);
-        for(Itemset is : M)
-        	System.err.println(is.getItemset() + ": " + is.getSupport() + ", " + is.getMinMIS());
         
         /* generate set L */
-        
         TreeSet<Itemset> L = new TreeSet<>(new ItemsetComparator());
-		try {
-			L = generateL(M);
-		} catch (NoFrequentItemsetsException e) {
-			System.err.println("Error: no frequent itemsets in the dataset; terminating.");
-			e.printStackTrace();
-		}       
-        System.err.println("L: " + L);
+		L = generateL(M);
         
         /* generate F1 */
-        
         ArrayList<TreeSet<Itemset>> frequentItemsets = new ArrayList<>();
         
         TreeSet<Itemset> F = new TreeSet<>();
+		F = generateF(L, 1);
+		frequentItemsets.add(F);
+
 		try {
-			F = generateF(L, 1);
-		} catch (NoFrequentItemsetsException e) {
-			System.err.println("Error: no frequent itemsets in the dataset; terminating.");
-			e.printStackTrace();
-		}
-        System.err.println("F: " + F);
+			for(int k = 2; k < kMax; k++) {
+				TreeSet<Itemset> C;
+				if(k == 2)
+					C = generateLevel2Candidates(L, SDC);
+				else
+					C = generateCandidates(F, SDC);
+				supportCounter(transactions, C, N);
+				F = generateF(C, k);
+				frequentItemsets.add(F);
+			}
+        } catch (NoFrequentItemsetsException e) {}
         
-        for(int k = 2; k < kMax; k++) {
-        	TreeSet<Itemset> C;
-        	if(k == 2) {
-        		C = generateLevel2Candidates(L, SDC);
-        		supportCounter(transactions, C, N);
-        		System.err.println("C: " + C);
-        	}
-        }
-        
+		System.out.println(frequentItemsets);
 	}
 	
 	private static TreeSet<Itemset> generateLevel2Candidates(TreeSet<Itemset> L, Double SDC) {
@@ -98,8 +86,10 @@ public class APriori {
 		TreeSet<Itemset> C = new TreeSet<>(new ItemsetComparator());
 		int k = 0;
 		for(Itemset outer : F) {
+			k ++;
 			int j = 0;
 			for(Itemset inner : F) {
+				j ++;
 				if(j <= k)
 					continue;
 				if(outer.isJoinable(inner, SDC)) {

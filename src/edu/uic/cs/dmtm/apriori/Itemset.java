@@ -98,11 +98,11 @@ public class Itemset {
 	}
 	public boolean prune(TreeSet<Itemset> F) {
 		for(Item i : itemset) {
-			TreeSet<Item> subset = itemset.stream().filter(item -> item.equals(i)).collect(Collectors.toCollection(TreeSet::new));
+			TreeSet<Item> subset = itemset.stream().filter(item -> !item.equals(i)).collect(Collectors.toCollection(TreeSet::new));
 			Iterator<Item> iterator = itemset.iterator();
 			Item first = iterator.next();
 			Item second = iterator.next();
-			if(itemset.stream().anyMatch(item -> item.equals(first)) || first.getMis() == second.getMis())
+			if(subset.stream().anyMatch(item -> item.equals(first)) || first.getMis() == second.getMis())
 				if(!F.stream().anyMatch(iset -> iset.getItemset().containsAll(subset)))
 					return true;
 		}
