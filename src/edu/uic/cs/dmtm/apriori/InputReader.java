@@ -55,10 +55,15 @@ public class InputReader {
         while((s = inputBuffer.readLine()) != null) {
         	String[] values = s.split("\\{|\\}")[1].split(", ");
         	Itemset temp = new Itemset(null);
-            for (String value : values)
-            	temp.addItem(items.get(Integer.valueOf(value.trim())));
-            transactions.add(temp);
+            for (String value : values) {
+            	Item i = items.get(Integer.valueOf(value.trim()));
+            	i.increaseSupportCount();
+            	temp.addItem(i);
+            }
+            transactions.add(temp); 
         }
+        int N = transactions.size();
+        items.values().stream().forEach(i -> i.setSupport((double) (i.getSupportCount()) / N));
         return SDC;
 	}
 

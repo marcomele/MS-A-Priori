@@ -4,10 +4,30 @@ public class Item implements Comparable<Item> {
 	
 	private Integer id;
 	private Double mis;
+	private Double support;
+	private Integer supportCount;
 	
+	public Double getSupport() {
+		return support;
+	}
+
+	public void setSupport(Double support) {
+		this.support = support;
+	}
+
+	public Integer getSupportCount() {
+		return supportCount;
+	}
+
+	public void increaseSupportCount() {
+		this.supportCount ++;
+	}
+
 	public Item(Integer id, Double mis) {
 		this.id = id;
 		this.mis = mis;
+		this.support = 0.0;
+		this.supportCount = 0;
 	}
 	
 	public Integer getId() {

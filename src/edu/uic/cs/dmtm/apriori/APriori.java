@@ -24,6 +24,8 @@ public class APriori {
         InputReader inputReader = new InputReader();
         Double SDC = inputReader.read(inputFile, parametersFile, transactions, cannotBeTogetherItemsets, mustHaveItems, I);
         
+        System.err.println(I);
+        
         TreeSet<Itemset> M = new TreeSet<>(new ItemsetComparator());
         int N = transactions.size();
         int kMax = transactions.stream().mapToInt(t -> t.getItemset().size()).max().getAsInt();
@@ -79,18 +81,34 @@ public class APriori {
 		int k = 0;
 		for(Itemset outer : L) {
 			k ++;
-//			System.err.println("k: " + k);
 			if(outer.getSupport() >= outer.getMinMIS()) {
 				int j = 0;
 				for(Itemset inner : L) {
 					j ++;
-//					System.err.println(j);
 					if(j <= k)
 						continue;
 					double inSup = inner.getSupport(), outSup = outer.getSupport();
 					if(inSup >= outer.getMinMIS() && Math.abs(outSup - inSup) <= SDC) {
-						C.add(outer.join2(inner));
+						C.add(outer.join(inner));
 					}
+				}
+			}
+		}
+		return C;
+	}
+	
+	private static TreeSet<Itemset> generateCandidates(TreeSet<Itemset> F, Double SDC) throws DifferentItemsetSizeException {
+		TreeSet<Itemset> C = new TreeSet<>(new ItemsetComparator());
+		int k = 0;
+		for(Itemset outer : F) {
+			int j = 0;
+			for(Itemset inner : F) {
+				if(j <= k)
+					continue;
+				if(outer.isJoinable(inner, SDC)) {
+					Itemset candidate = outer.join(inner);
+					if(!candidate.prune(F))
+						C.add(candidate);
 				}
 			}
 		}
