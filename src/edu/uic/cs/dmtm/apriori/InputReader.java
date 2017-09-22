@@ -37,8 +37,8 @@ public class InputReader {
         			if(!string.isEmpty()) {
         				Itemset cbtItemset = new Itemset(null);
         				String[] ids = string.split("\\}")[0].split(", ");
-        				//System.out.println(string.split("\\}")[0]);
         				for(String i : ids) {
+        					System.err.println(i);
         					cbtItemset.getItemset().add(items.get(i));
         				}
         				cannotBeTogetherItemsets.add(cbtItemset);        				

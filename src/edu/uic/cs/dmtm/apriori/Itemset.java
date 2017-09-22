@@ -119,7 +119,7 @@ public class Itemset {
 	
 	@Override
 	public String toString() {
-		return itemset.stream().collect(Collectors.toList()).toString() + ":" + tailCount;
+		return itemset.stream().collect(Collectors.toList()).toString() + "\tsupport: " + supportCount + "\ttailCount: " + tailCount + "\n";
 	}
 	public int getTailCount() {
 		return tailCount;
@@ -128,7 +128,7 @@ public class Itemset {
 		this.tailCount ++;
 	}
 	public boolean cannotBeTogether(ArrayList<Itemset> cannotBeTogetherItemsets) {
-		return cannotBeTogetherItemsets.stream().anyMatch(rule -> itemset.contains(rule));
+		return cannotBeTogetherItemsets.stream().anyMatch(rule -> this.contains(rule));
 	}
 	public boolean mustHave(ArrayList<Item> mustHaveItems) {
 		return mustHaveItems.stream().anyMatch(item -> itemset.contains(item));
