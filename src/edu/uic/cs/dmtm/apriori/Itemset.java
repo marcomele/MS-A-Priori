@@ -1,5 +1,6 @@
 package edu.uic.cs.dmtm.apriori;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ public class Itemset {
 	private Double minMIS;
 	private Double maxMIS;
 	private int supportCount;
+	private int tailCount;
 	
 	public int getSupportCount() {
 		return supportCount;
@@ -41,6 +43,7 @@ public class Itemset {
 	public Itemset(Double sdc) {
 		this.sdc = sdc;
 		supportCount = 0;
+		tailCount = 0;
 	}
 	
 	public TreeSet<Item> getItemset() {
@@ -108,10 +111,27 @@ public class Itemset {
 		}
 		return false;
 	}
+	public Itemset getTail() {
+		Itemset tail = new Itemset(null);
+		this.itemset.stream().skip(1L).forEachOrdered(item -> tail.addItem(item));
+		return tail;
+	}
 	
 	@Override
 	public String toString() {
-		return itemset.stream().collect(Collectors.toList()).toString() + ":" + supportCount;
+		return itemset.stream().collect(Collectors.toList()).toString() + ":" + tailCount;
+	}
+	public int getTailCount() {
+		return tailCount;
+	}
+	public void increaseTailCount() {
+		this.tailCount ++;
+	}
+	public boolean cannotBeTogether(ArrayList<Itemset> cannotBeTogetherItemsets) {
+		return cannotBeTogetherItemsets.stream().anyMatch(rule -> itemset.contains(rule));
+	}
+	public boolean mustHave(ArrayList<Item> mustHaveItems) {
+		return mustHaveItems.stream().anyMatch(item -> itemset.contains(item));
 	}
 
 }

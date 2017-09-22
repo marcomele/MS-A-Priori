@@ -32,7 +32,7 @@ public class APriori {
         	M.add(tmp);
         }
         
-        supportCounter(transactions, M, N);
+        supportAndTailCounter(transactions, M, N);
         
         /* generate set L */
         TreeSet<Itemset> L = new TreeSet<>(new ItemsetComparator());
@@ -49,19 +49,24 @@ public class APriori {
 			for(int k = 2; k < kMax; k++) {
 				TreeSet<Itemset> C;
 				if(k == 2)
-					C = generateLevel2Candidates(L, SDC);
+					C = generateLevel2Candidates(L, cannotBeTogetherItemsets, SDC);
 				else
-					C = generateCandidates(F, SDC);
-				supportCounter(transactions, C, N);
+					C = generateCandidates(F, cannotBeTogetherItemsets, SDC);
+				supportAndTailCounter(transactions, C, N);
 				F = generateF(C, k);
 				frequentItemsets.add(F);
 			}
         } catch (NoFrequentItemsetsException e) {}
+		
+		/* apply mustHave rule */
+		if(!mustHaveItems.isEmpty())
+			frequentItemsets.stream()
+				.forEach(fk -> fk.removeIf(itemset -> !itemset.mustHave(mustHaveItems)));
         
 		System.out.println(frequentItemsets);
 	}
 	
-	private static TreeSet<Itemset> generateLevel2Candidates(TreeSet<Itemset> L, Double SDC) {
+	private static TreeSet<Itemset> generateLevel2Candidates(TreeSet<Itemset> L, ArrayList<Itemset> cannotBeTogetherItemsets, Double SDC) {
 		TreeSet<Itemset> C = new TreeSet<>(new ItemsetComparator());
 		int k = 0;
 		for(Itemset outer : L) {
@@ -74,7 +79,9 @@ public class APriori {
 						continue;
 					double inSup = inner.getSupport(), outSup = outer.getSupport();
 					if(inSup >= outer.getMinMIS() && Math.abs(outSup - inSup) <= SDC) {
-						C.add(outer.join(inner));
+						Itemset candidate = outer.join(inner);
+						if(!candidate.cannotBeTogether(cannotBeTogetherItemsets))
+							C.add(candidate);
 					}
 				}
 			}
@@ -82,7 +89,7 @@ public class APriori {
 		return C;
 	}
 	
-	private static TreeSet<Itemset> generateCandidates(TreeSet<Itemset> F, Double SDC) throws DifferentItemsetSizeException {
+	private static TreeSet<Itemset> generateCandidates(TreeSet<Itemset> F, ArrayList<Itemset> cannotBeTogetherItemsets, Double SDC) throws DifferentItemsetSizeException {
 		TreeSet<Itemset> C = new TreeSet<>(new ItemsetComparator());
 		int k = 0;
 		for(Itemset outer : F) {
@@ -94,7 +101,7 @@ public class APriori {
 					continue;
 				if(outer.isJoinable(inner, SDC)) {
 					Itemset candidate = outer.join(inner);
-					if(!candidate.prune(F))
+					if(!candidate.prune(F) && !candidate.cannotBeTogether(cannotBeTogetherItemsets))
 						C.add(candidate);
 				}
 			}
@@ -102,11 +109,15 @@ public class APriori {
 		return C;
 	}
 
-	private static void supportCounter(ArrayList<Itemset> transactions, TreeSet<Itemset> candidates, int N) {
+	private static void supportAndTailCounter(ArrayList<Itemset> transactions, TreeSet<Itemset> candidates, int N) {
 		for(Itemset transaction : transactions)
 			candidates.stream()
-				.filter(c -> transaction.contains(c))
-				.forEach(c -> c.increaseSupportCount());
+				.forEach(c -> {
+					if(transaction.contains(c))
+						c.increaseSupportCount();
+					if(transaction.contains(c.getTail()))
+						c.increaseTailCount();
+				});
 		candidates.stream().forEach(c -> c.computeSupport(N));
 	}
 	
