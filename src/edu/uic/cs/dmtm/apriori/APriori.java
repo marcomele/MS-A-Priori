@@ -12,6 +12,7 @@ public class APriori {
 	public static void main(String[] args) throws IOException, NoFrequentItemsetsException, DifferentItemsetSizeException {
 		File inputFile = new File("inputdata.txt");
 		File parametersFile = new File("parameters.txt");
+		File outputFile = new File("output.txt");
 		
 		ArrayList<Itemset> transactions = new ArrayList<>();
         ArrayList<Itemset> cannotBeTogetherItemsets = new ArrayList<>();
@@ -64,6 +65,8 @@ public class APriori {
 				.forEach(fk -> fk.removeIf(itemset -> !itemset.mustHave(mustHaveItems)));
         
 		System.out.println(frequentItemsets);
+		OutputWriter outputWriter = new OutputWriter();
+		outputWriter.write(outputFile, frequentItemsets);
 	}
 	
 	private static TreeSet<Itemset> generateLevel2Candidates(TreeSet<Itemset> L, ArrayList<Itemset> cannotBeTogetherItemsets, Double SDC) {
