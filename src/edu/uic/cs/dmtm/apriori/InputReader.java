@@ -67,10 +67,8 @@ public class InputReader {
         				if(!string.isEmpty()) {
         					Itemset cbtItemset = new Itemset(null);
         					String[] ids = string.split("\\}")[0].split(", ");
-        					for(String i : ids) {
-        						System.err.println(i);
+        					for(String i : ids)
         						cbtItemset.getItemset().add(items.get(i));
-        					}
         					cannotBeTogetherItemsets.add(cbtItemset);        				
         				}
         			}
