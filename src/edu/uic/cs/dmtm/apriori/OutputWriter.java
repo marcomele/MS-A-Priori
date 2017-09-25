@@ -38,6 +38,8 @@ public class OutputWriter {
 		
 		int level = 1;
 		for(TreeSet<Itemset> treeSet : frequentItemsets) {
+			if(treeSet.size() == 0)
+				break;
 			outputBuffer.write("Frequent " + level + "-itemsets");
 			outputBuffer.newLine();
 			for(Itemset itemset : treeSet) {
