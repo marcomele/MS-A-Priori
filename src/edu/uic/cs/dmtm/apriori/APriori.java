@@ -55,6 +55,7 @@ public class APriori {
         ArrayList<Item> mustHaveItems = new ArrayList<>();
         TreeMap<String, Item> I = new TreeMap<>();
         
+        System.err.println("Reading files...");        
         InputReader inputReader = new InputReader();
         Double SDC = inputReader.read(inputFile, parametersFile, transactions, cannotBeTogetherItemsets, mustHaveItems, I);
                 
@@ -82,8 +83,9 @@ public class APriori {
 		F = generateF(L, 1);
 		frequentItemsets.add(F);
 
-		try {
+		try { 
 			for(int k = 2; k < kMax; k++) {
+				System.err.println("Computing level " + k + "...");
 				TreeSet<Itemset> C;
 				if(k == 2)
 					C = generateLevel2Candidates(L, cannotBeTogetherItemsets, SDC);
@@ -95,14 +97,16 @@ public class APriori {
 			}
         } catch (NoFrequentItemsetsException e) {}
 		
+		System.err.println("Applying must-have rules...");
 		/* apply mustHave rule */
 		if(!mustHaveItems.isEmpty())
 			frequentItemsets.stream()
 				.forEach(fk -> fk.removeIf(itemset -> !itemset.mustHave(mustHaveItems)));
         
-		System.out.println(frequentItemsets);
+		System.err.println("Writing output file...");
 		OutputWriter outputWriter = new OutputWriter();
 		outputWriter.write(outputFile, frequentItemsets);
+		System.err.println("Done.");
 	}
 	
 	/**
