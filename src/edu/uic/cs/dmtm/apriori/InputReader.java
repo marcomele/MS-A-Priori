@@ -69,7 +69,7 @@ public class InputReader {
         					String[] ids = string.split("\\}")[0].split(", ");
         					for(String i : ids)
         						cbtItemset.getItemset().add(items.get(i));
-        					cannotBeTogetherItemsets.add(cbtItemset);        				
+        					cannotBeTogetherItemsets.add(cbtItemset);
         				}
         			}
         		} else if(s.contains("must")) {
