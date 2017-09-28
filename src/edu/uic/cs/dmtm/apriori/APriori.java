@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 /**
  * Java application running the <b>Multiple Minimum Support A Priori</b>
- * algoritghm on a transaction base. The basic A Priori algorithm
+ * algorithm on a transaction base. The basic A Priori algorithm
  * performs association rule mining as follows:
  * <ul>
  * <li>identify frequent individual items
