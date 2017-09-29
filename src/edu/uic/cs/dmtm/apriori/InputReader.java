@@ -76,7 +76,7 @@ public class InputReader {
         			String[] st = s.split(": ")[1].split(" [a-z ]*");
         			for(String stt : st)
         				mustHaveItems.add(items.get(stt));
-        		} else
+        		} else if(!s.isEmpty())
         			throw new IOException("Bad line format.");
         	}	
         

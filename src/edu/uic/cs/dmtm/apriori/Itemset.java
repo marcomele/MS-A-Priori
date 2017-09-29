@@ -159,8 +159,6 @@ public class Itemset {
 	 * @see Itemset 
 	 */
 	public Itemset join(Itemset other) throws NonJoinableItemsetsException, DifferentItemsetSizeException {
-		if(!this.isJoinable(other, sdc))
-			throw new NonJoinableItemsetsException();
 		Itemset joined = new Itemset(this.sdc);
 		joined.itemset.addAll(this.itemset);
 		joined.itemset.addAll(other.itemset);
